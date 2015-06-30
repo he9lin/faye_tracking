@@ -3,6 +3,8 @@
 A Faye extension for tracking user subscriptions, i.e. can be used for
 checking if a user is online.
 
+BUT: http://faye.jcoglan.com/ruby/monitoring.html
+
 ## Prerequisites
 
 * Faye

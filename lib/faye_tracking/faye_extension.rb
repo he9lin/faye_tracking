@@ -13,13 +13,14 @@ module FayeTracking
 
       unless message['error']
         subs_channel  = message['subscription']
+        client_id     = message['clientId']
         app_client_id = message['ext']['faye_tracking_client_id']
 
         case message['channel']
         when '/meta/subscribe'
-          @tracker.add(subs_channel, app_client_id)
+          @tracker.add_channel(subs_channel, app_client_id)
         when '/meta/disconnect'
-          @tracker.remove(subs_channel, app_client_id)
+          @tracker.remove_channel_by_client_id(subs_channel, app_client_id)
         end
       end
 
