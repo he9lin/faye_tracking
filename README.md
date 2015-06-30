@@ -1,6 +1,6 @@
 # FayeTracking
 
-Faye extensions for tracking user subscriptions, i.e. can be used for
+A Faye extension for tracking user subscriptions, i.e. can be used for
 checking if a user is online.
 
 ## Prerequisites
@@ -40,7 +40,7 @@ client.add_extension(FayeTracking.faye_extension)
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/faye_tracking/fork )
+1. Fork it ( https://github.com/he9lin/faye_tracking/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
