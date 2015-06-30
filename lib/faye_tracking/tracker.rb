@@ -16,6 +16,7 @@ module FayeTracking
         @key_list.remove(channel, user)
         @key_list.remove(user, channel)
       end
+      @mapping.delete(client_id)
     end
 
     def remove_user_from_all_channels(client_id)
@@ -25,6 +26,7 @@ module FayeTracking
         end
         @key_list.remove_all(user)
       end
+      @mapping.delete(client_id)
     end
 
     def channels_for_user(user)
