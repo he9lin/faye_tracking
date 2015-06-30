@@ -42,7 +42,7 @@ FayeTracking.user_in_any_channel?('/user_1')
 FayeTracking.user_in_channel?('/user_1', '/chat/1')
 ```
 
-Client side: a PrivatePub example using a fork here: https://github.com/he9lin/private_pub, which makes it possible to add client side Faye extensions to PrivatePub javascript.
+Client side: a PrivatePub example using a fork here: https://github.com/he9lin/private_pub, a fork of Ryan Bate's PrivatePub gem. This fork makes it possible to add client side Faye extensions to PrivatePub javascript.
 
 ```coffeescript
 FayeTrackingExtension =
