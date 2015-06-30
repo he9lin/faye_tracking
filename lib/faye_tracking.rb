@@ -1,10 +1,11 @@
 require 'redis'
 require 'redis-namespace'
+require 'logger'
 require "faye_tracking/version"
 
 module FayeTracking
   class << self
-    attr_accessor :redis
+    attr_accessor :redis, :logger
 
     def configure(&block)
       block.call(self)
@@ -28,6 +29,10 @@ module FayeTracking
 
     def all_users_in_channel(channel)
       tracker.users_in_channel(channel)
+    end
+
+    def logger
+      @logger ||= Logger.new(STDOUT)
     end
 
     private

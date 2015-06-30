@@ -4,6 +4,7 @@ require 'faye_tracking'
 
 FayeTracking.configure do |config|
   config.redis = Redis::Namespace.new(:faye_tracking_test, redis: Redis.new)
+  config.logger.level = Logger::INFO
 end
 
 RSpec.configure do |config|

@@ -9,6 +9,8 @@ module FayeTracking
     def incoming(message, callback)
       return callback.call(message) unless MONITORED_CHANNELS.include? message['channel']
 
+      FayeTracking.logger.debug "received incoming message: #{message}"
+
       unless message['error']
         subs_channel  = message['subscription']
         app_client_id = message['ext']['faye_tracking_client_id']
