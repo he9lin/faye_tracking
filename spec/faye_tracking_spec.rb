@@ -9,26 +9,23 @@ describe FayeTracking do
   let(:another_client_id) { '651w533ncba' }
 
   def faye_run(meta_action, subscription, client_id, user)
-    # {"channel"=>"/meta/subscribe", "clientId"=>"rpy799jnfeqxi651w533nc5sxxmwanf", "subscription"=>"/companies/1", "id"=>"3", "ext"=>{"private_pub_signature"=>"6856c32ee576322163928717ec9288d570185830", "private_pub_timestamp"=>1435689757199, "faye_tracking_client_id"=>"3"}}
-    # {"channel"=>"/meta/disconnect", "clientId"=>"rpy799jnfeqxi651w533nc5sxxmwanf", "id"=>"5"}
-
-    subscription = opts["subscription"]
-    client_id    = opts["client_id"]
-    user         = opts["user"]
-
     message = { "channel"  => meta_action, "clientId" => client_id }
-    message["subscription"] = subscription if subscription
-    message["ext"] = { "faye_tracking_client_id" => user }
+    message["subscription"] = subscription                 if subscription
+    message["ext"] = { "faye_tracking_client_id" => user } if user
 
     FayeTracking.faye_extension.incoming(message, lambda { |m| m })
   end
 
   def faye_subscribe(channel, client_id, user)
-    faye_run('/meta/subscribe', client_id, channel, user)
+    faye_run('/meta/subscribe', channel, client_id, user)
   end
 
-  def faye_disconnect(channel, client_id, user)
-    faye_run('/meta/disconnect', client_id, channel, user)
+  def faye_unsubscribe(channel, client_id)
+    faye_run('/meta/unsubscribe', channel, client_id, nil)
+  end
+
+  def faye_disconnect(client_id)
+    faye_run('/meta/disconnect', nil, client_id, nil)
   end
 
   context 'subscribing to a channel' do
@@ -43,29 +40,43 @@ describe FayeTracking do
     end
 
     it 'returns all users in a channel' do
-      faye_subscribe 'room', 'user_2'
+      faye_subscribe 'room', client_id, 'user_2'
       expect(described_class.all_users_in_channel('room')).to match_array(['user_1', 'user_2'])
     end
   end
 
-  context 'disconnecting to a channel' do
+  context 'unsubscribing a channel' do
     before do
-      faye_subscribe 'room', 'user_1'
+      faye_subscribe 'room', client_id, 'user_1'
     end
 
     it 'removes a user from a subscription channel' do
-      faye_disconnect 'room', client_id
+      faye_unsubscribe 'room', client_id
       expect(described_class.user_in_any_channel?('user_1')).to be_falsey
       expect(described_class.all_users_in_channel('rooom')).to eq([])
 
-      faye_subscribe  'room', 'user_2'
+      faye_subscribe  'room', client_id, 'user_2'
       expect(described_class.user_in_any_channel?('user_2')).to be_truthy
     end
 
     it 'does not raise error when removing a non-existing user' do
       expect {
-        faye_disconnect 'room', 'user_2'
+        faye_unsubscribe 'room', 'user_2'
       }.to_not raise_error
+    end
+  end
+
+  context 'disconnecting' do
+    before do
+      faye_subscribe 'room1', client_id, 'user_1'
+      faye_subscribe 'room2', client_id, 'user_1'
+      faye_subscribe 'room1', another_client_id, 'user_2'
+    end
+
+    it 'removes the user from all channels' do
+      faye_disconnect(client_id)
+      expect(described_class.user_in_any_channel?('user_1')).to be_falsey
+      expect(described_class.all_users_in_channel('room1')).to eq(['user_2'])
     end
   end
 end

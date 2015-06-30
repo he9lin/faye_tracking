@@ -4,6 +4,8 @@ require 'logger'
 require "faye_tracking/version"
 
 module FayeTracking
+  MAPPING_STORE_NAME = 'client_id_to_user'.freeze
+
   class << self
     attr_accessor :redis, :logger
 
@@ -12,6 +14,7 @@ module FayeTracking
     end
 
     def reset_store
+      raise 'redis is not set' unless redis
       redis.keys('*').each {|k| redis.del k}
     end
 
@@ -39,12 +42,18 @@ module FayeTracking
 
     def tracker
       raise 'redis is not set' unless redis
-      @_tracker ||= Tracker.new(RedisStore.new(redis))
+      @_tracker ||= begin
+        key_list_store = RedisKeyList.new(redis)
+        mapping_store  = RedisMapping.new(redis)
+        Tracker.new(key_list_store, mapping_store)
+      end
     end
   end
 end
 
 require "faye_tracking/faye_extension"
-require "faye_tracking/abstract_store"
-require "faye_tracking/redis_store"
+require "faye_tracking/store/abstract_key_list"
+require "faye_tracking/store/abstract_mapping"
+require "faye_tracking/store/adapter/redis_key_list"
+require "faye_tracking/store/adapter/redis_mapping"
 require "faye_tracking/tracker"

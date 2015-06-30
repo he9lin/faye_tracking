@@ -1,5 +1,5 @@
 module FayeTracking
-  class RedisStore < AbstractStore
+  class RedisKeyList < AbstractKeyList
     def initialize(redis)
       @redis = redis
     end
@@ -22,6 +22,10 @@ module FayeTracking
 
     def empty?(key)
       @redis.smembers(key).empty?
+    end
+
+    def remove_all(key)
+      @redis.del(key)
     end
   end
 end

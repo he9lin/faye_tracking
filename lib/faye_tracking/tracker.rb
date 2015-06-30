@@ -1,33 +1,46 @@
 module FayeTracking
   class Tracker
-    def initialize(store)
-      @store = store
+    def initialize(key_list, mapping)
+      @key_list = key_list
+      @mapping = mapping
     end
 
-    def add(channel, user)
-      @store.add(channel, user)
-      @store.add(user, channel)
+    def add(channel, client_id, user)
+      @mapping.set(client_id, user)
+      @key_list.add(channel, user)
+      @key_list.add(user, channel)
     end
 
-    def remove(channel, user)
-      @store.remove(channel, user)
-      @store.remove(user, channel)
+    def remove(channel, client_id)
+      if user = @mapping.get(client_id)
+        @key_list.remove(channel, user)
+        @key_list.remove(user, channel)
+      end
+    end
+
+    def remove_user_from_all_channels(client_id)
+      if user = @mapping.get(client_id)
+        channels_for_user(user).each do |channel|
+          @key_list.remove(channel, user)
+        end
+        @key_list.remove_all(user)
+      end
     end
 
     def channels_for_user(user)
-      @store.members(user)
+      @key_list.members(user)
     end
 
     def users_in_channel(channel)
-      @store.members(channel)
+      @key_list.members(channel)
     end
 
     def user_in_channel?(user, channel)
-      @store.member?(user, channel)
+      @key_list.member?(user, channel)
     end
 
     def channel_has_user?(channel, user)
-      @store.member?(channel, user)
+      @key_list.member?(channel, user)
     end
   end
 end
