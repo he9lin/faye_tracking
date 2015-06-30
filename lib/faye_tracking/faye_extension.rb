@@ -1,6 +1,6 @@
 module FayeTracking
   class FayeExtension
-    MONITORED_CHANNELS = [ '/meta/subscribe', '/meta/disconnect' ]
+    MONITORED_CHANNELS = [ '/meta/subscribe', '/meta/unsubscribe', '/meta/disconnect' ]
 
     def initialize(tracker)
       @tracker = tracker
