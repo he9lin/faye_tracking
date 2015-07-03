@@ -54,7 +54,7 @@ FayeTrackingExtension =
       message.ext.faye_tracking_client_id = subscription.user_id
     callback(message)
 
-PrivatePub.extensions = [PrivatePubClientIdExtension]
+PrivatePub.extensions = [FayeTrackingExtension]
 
 # To subscribe to a channel
 subscription["user_id"] = user_id
