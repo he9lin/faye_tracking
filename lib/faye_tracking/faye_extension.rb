@@ -21,7 +21,9 @@ module FayeTracking
           if app_client_id = ext['faye_tracking_client_id']
             @tracker.add(subs_channel, client_id, app_client_id)
           else
-            message['error'] = "missing ext['faye_tracking_client_id']"
+            error_message = "missing ext['faye_tracking_client_id']"
+            FayeTracking.logger.debug "error with message: #{error_message}"
+            message['error'] = error_message
           end
         when '/meta/unsubscribe'
           @tracker.remove(subs_channel, client_id)
