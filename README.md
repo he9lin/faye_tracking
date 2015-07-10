@@ -62,6 +62,12 @@ PrivatePub.sign(subscription)
 PrivatePub.subscribe(subscription.channel, callback)
 ```
 
+## TODO
+
+* <del>Allow one application user to have many Faye `clientId` mappings.</del>
+* Rely on events (instead of extensions) to handle user disconnecting event
+because it's more reliable. (see http://faye.jcoglan.com/ruby/monitoring.html)
+
 ## Contributing
 
 1. Fork it ( https://github.com/he9lin/faye_tracking/fork )

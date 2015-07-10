@@ -28,20 +28,22 @@ describe FayeTracking do
     faye_run('/meta/disconnect', nil, client_id, nil)
   end
 
-  context 'subscribing to a channel' do
-    before do
-      faye_subscribe 'room', client_id, 'user_1'
-    end
+  describe 'subscribing to a channel' do
+    describe 'multiple users' do
+      before do
+        faye_subscribe 'room', client_id, 'user_1'
+      end
 
-    it 'adds user to the subscription channel' do
-      expect(described_class.user_in_any_channel?('user_1')).to be_truthy
-      expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
-      expect(described_class.user_in_channel?('user_2', 'room')).to be_falsey
-    end
+      it 'adds user to the subscription channel' do
+        expect(described_class.user_in_any_channel?('user_1')).to be_truthy
+        expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
+        expect(described_class.user_in_channel?('user_2', 'room')).to be_falsey
+      end
 
-    it 'returns all users in a channel' do
-      faye_subscribe 'room', client_id, 'user_2'
-      expect(described_class.all_users_in_channel('room')).to match_array(['user_1', 'user_2'])
+      it 'returns all users in a channel' do
+        faye_subscribe 'room', client_id, 'user_2'
+        expect(described_class.all_users_in_channel('room')).to match_array(['user_1', 'user_2'])
+      end
     end
   end
 
@@ -63,6 +65,23 @@ describe FayeTracking do
       expect {
         faye_unsubscribe 'room', 'user_2'
       }.to_not raise_error
+    end
+  end
+
+  describe 'subscribing/unsubscribing same users with different clientIds' do
+    before do
+      faye_subscribe 'room', client_id, 'user_1'
+      faye_subscribe 'room', another_client_id, 'user_1'
+    end
+
+    it 'user able to have multiple client ids' do
+      expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
+
+      faye_unsubscribe 'room', client_id
+      expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
+
+      faye_unsubscribe 'room', another_client_id
+      expect(described_class.user_in_channel?('user_1', 'room')).to be_falsey
     end
   end
 

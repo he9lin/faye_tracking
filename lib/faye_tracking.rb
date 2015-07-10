@@ -42,11 +42,7 @@ module FayeTracking
 
     def tracker
       raise 'redis is not set' unless redis
-      @_tracker ||= begin
-        key_list_store = RedisKeyList.new(redis)
-        mapping_store  = RedisMapping.new(redis)
-        Tracker.new(key_list_store, mapping_store)
-      end
+      @_tracker = Tracker.new(redis)
     end
   end
 end
@@ -55,5 +51,6 @@ require "faye_tracking/faye_extension"
 require "faye_tracking/store/abstract_key_list"
 require "faye_tracking/store/abstract_mapping"
 require "faye_tracking/store/adapter/redis_key_list"
+require "faye_tracking/store/adapter/namespaced_key_list"
 require "faye_tracking/store/adapter/redis_mapping"
 require "faye_tracking/tracker"
