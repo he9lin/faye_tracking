@@ -28,7 +28,7 @@ module FayeTracking
         when '/meta/unsubscribe'
           @tracker.remove(subs_channel, client_id)
         when '/meta/disconnect'
-          @tracker.remove_user_from_all_channels(client_id)
+          @tracker.remove_all(client_id)
         end
       end
 

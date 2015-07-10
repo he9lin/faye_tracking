@@ -17,20 +17,17 @@ module FayeTracking
     def remove(channel, client_id)
       @channel_to_client_ids.remove(channel, client_id)
       @client_id_to_channels.remove(client_id, channel)
-      users = @client_id_to_users.members(client_id)
-      users.each do |user|
+      @client_id_to_users.members(client_id).each do |user|
         @user_to_client_ids.remove(user, client_id)
       end
       @client_id_to_users.remove_all(client_id)
     end
 
-    def remove_user_from_all_channels(client_id)
-      channels = @client_id_to_channels.members(client_id)
-      channels.each do |channel|
+    def remove_all(client_id)
+      @client_id_to_channels.members(client_id).each do |channel|
         @channel_to_client_ids.remove(channel, client_id)
       end
-      users = @client_id_to_users.members(client_id)
-      users.each do |user|
+      @client_id_to_users.members(client_id).each do |user|
         @user_to_client_ids.remove(user, client_id)
       end
       @client_id_to_users.remove_all(client_id)
