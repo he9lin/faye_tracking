@@ -1,8 +1,10 @@
 module FayeTracking
   class NamespacedKeyList < AbstractKeyList
     def initialize(ns, key_list)
+      raise ArgumentError, 'namespace param cannot be blank' if ns.nil? || ns.empty?
+      
+      @ns       = ns
       @key_list = key_list
-      @ns = ns # check presence
     end
 
     def add(key, value)

@@ -1,10 +1,10 @@
 module FayeTracking
   class Tracker
     def initialize(redis)
-      @channel_to_client_ids = NamespacedKeyList.new('channel_to_client_ids', RedisKeyList.new(redis))
-      @client_id_to_channels = NamespacedKeyList.new('client_id_to_channels', RedisKeyList.new(redis))
-      @user_to_client_ids    = NamespacedKeyList.new('user_to_client_ids',    RedisKeyList.new(redis))
-      @client_id_to_users    = NamespacedKeyList.new('client_id_to_users',    RedisKeyList.new(redis))
+      @channel_to_client_ids = namespaced_key_list('channel_to_client_ids', redis)
+      @client_id_to_channels = namespaced_key_list('client_id_to_channels', redis)
+      @user_to_client_ids    = namespaced_key_list('user_to_client_ids',    redis)
+      @client_id_to_users    = namespaced_key_list('client_id_to_users',    redis)
     end
 
     def add(channel, client_id, user)
@@ -60,6 +60,12 @@ module FayeTracking
       client_ids.any? do |client_id|
         @user_to_client_ids.member? user, client_id
       end
+    end
+
+    private
+
+    def namespaced_key_list(name, redis)
+      NamespacedKeyList.new(name, RedisKeyList.new(redis))
     end
   end
 end

@@ -37,7 +37,7 @@ end
 
 client.add_extension(FayeTracking.faye_extension)
 
-FayeTracking.all_users_in_channel('/chat/1')
+FayeTracking.users_in_channel('/chat/1')
 FayeTracking.user_in_any_channel?('/user_1')
 FayeTracking.user_in_channel?('/user_1', '/chat/1')
 ```

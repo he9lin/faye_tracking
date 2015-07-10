@@ -42,7 +42,7 @@ describe FayeTracking do
 
       it 'returns all users in a channel' do
         faye_subscribe 'room', client_id, 'user_2'
-        expect(described_class.all_users_in_channel('room')).to match_array(['user_1', 'user_2'])
+        expect(described_class.users_in_channel('room')).to match_array(['user_1', 'user_2'])
       end
     end
   end
@@ -55,7 +55,7 @@ describe FayeTracking do
     it 'removes a user from a subscription channel' do
       faye_unsubscribe 'room', client_id
       expect(described_class.user_in_any_channel?('user_1')).to be_falsey
-      expect(described_class.all_users_in_channel('rooom')).to eq([])
+      expect(described_class.users_in_channel('rooom')).to eq([])
 
       faye_subscribe  'room', client_id, 'user_2'
       expect(described_class.user_in_any_channel?('user_2')).to be_truthy
@@ -95,7 +95,7 @@ describe FayeTracking do
     it 'removes the user from all channels' do
       faye_disconnect(client_id)
       expect(described_class.user_in_any_channel?('user_1')).to be_falsey
-      expect(described_class.all_users_in_channel('room1')).to eq(['user_2'])
+      expect(described_class.users_in_channel('room1')).to eq(['user_2'])
     end
   end
 end
