@@ -43,6 +43,22 @@ module FayeTracking
     def tracker
       @_tracker = Tracker.new(redis)
     end
+
+    def on_subscribe_callbacks
+      @_on_subscribe_callbacks || reset_on_subscribe_callbacks
+    end
+
+    def on_subscribe(&block)
+      on_subscribe_callbacks << block
+    end
+
+    def run_on_subscribe_callbacks(*args)
+      on_subscribe_callbacks.each { |blk| blk.call(*args) }
+    end
+
+    def reset_on_subscribe_callbacks
+      @_on_subscribe_callbacks = []
+    end
   end
 end
 

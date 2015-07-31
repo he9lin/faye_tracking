@@ -42,7 +42,19 @@ describe FayeTracking do
 
       it 'returns all users in a channel' do
         faye_subscribe 'room', client_id, 'user_2'
-        expect(described_class.users_in_channel('room')).to match_array(['user_1', 'user_2'])
+        expect(described_class.users_in_channel('room')).to \
+          match_array(['user_1', 'user_2'])
+      end
+    end
+
+    describe 'customize subscribe block' do
+      it 'can set a customize subscribe block' do
+        result = nil
+        FayeTracking.on_subscribe do |client_id, user_id, channel|
+          result = [client_id, user_id, channel]
+        end
+        faye_subscribe 'room', client_id, 'user_1'
+        expect(result).to eq([client_id, 'user_1', 'room'])
       end
     end
   end
