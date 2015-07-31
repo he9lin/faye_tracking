@@ -55,6 +55,7 @@ describe FayeTracking do
         end
         faye_subscribe 'room', client_id, 'user_1'
         expect(result).to eq([client_id, 'user_1', 'room'])
+        FayeTracking.reset_on_subscribe_callbacks
       end
     end
   end
