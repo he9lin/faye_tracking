@@ -65,55 +65,55 @@ describe FayeTracking do
     end
   end
 
-  context 'unsubscribing a channel' do
-    before do
-      faye_subscribe 'room', client_id, 'user_1'
-    end
-
-    it 'removes a user from a subscription channel' do
-      faye_unsubscribe 'room', client_id
-      expect(described_class.user_in_any_channel?('user_1')).to be_falsey
-      expect(described_class.users_in_channel('rooom')).to eq([])
-
-      faye_subscribe  'room', client_id, 'user_2'
-      expect(described_class.user_in_any_channel?('user_2')).to be_truthy
-    end
-
-    it 'does not raise error when removing a non-existing user' do
-      expect {
-        faye_unsubscribe 'room', 'user_2'
-      }.to_not raise_error
-    end
-  end
-
-  describe 'subscribing/unsubscribing same users with different clientIds' do
-    before do
-      faye_subscribe 'room', client_id, 'user_1'
-      faye_subscribe 'room', another_client_id, 'user_1'
-    end
-
-    it 'user able to have multiple client ids' do
-      expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
-
-      faye_unsubscribe 'room', client_id
-      expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
-
-      faye_unsubscribe 'room', another_client_id
-      expect(described_class.user_in_channel?('user_1', 'room')).to be_falsey
-    end
-  end
-
-  context 'disconnecting' do
-    before do
-      faye_subscribe 'room1', client_id, 'user_1'
-      faye_subscribe 'room2', client_id, 'user_1'
-      faye_subscribe 'room1', another_client_id, 'user_2'
-    end
-
-    it 'removes the user from all channels' do
-      faye_disconnect(client_id)
-      expect(described_class.user_in_any_channel?('user_1')).to be_falsey
-      expect(described_class.users_in_channel('room1')).to eq(['user_2'])
-    end
-  end
+  # context 'unsubscribing a channel' do
+  #   before do
+  #     faye_subscribe 'room', client_id, 'user_1'
+  #   end
+  #
+  #   it 'removes a user from a subscription channel' do
+  #     faye_unsubscribe 'room', client_id
+  #     expect(described_class.user_in_any_channel?('user_1')).to be_falsey
+  #     expect(described_class.users_in_channel('rooom')).to eq([])
+  #
+  #     faye_subscribe  'room', client_id, 'user_2'
+  #     expect(described_class.user_in_any_channel?('user_2')).to be_truthy
+  #   end
+  #
+  #   it 'does not raise error when removing a non-existing user' do
+  #     expect {
+  #       faye_unsubscribe 'room', 'user_2'
+  #     }.to_not raise_error
+  #   end
+  # end
+  #
+  # describe 'subscribing/unsubscribing same users with different clientIds' do
+  #   before do
+  #     faye_subscribe 'room', client_id, 'user_1'
+  #     faye_subscribe 'room', another_client_id, 'user_1'
+  #   end
+  #
+  #   it 'user able to have multiple client ids' do
+  #     expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
+  #
+  #     faye_unsubscribe 'room', client_id
+  #     expect(described_class.user_in_channel?('user_1', 'room')).to be_truthy
+  #
+  #     faye_unsubscribe 'room', another_client_id
+  #     expect(described_class.user_in_channel?('user_1', 'room')).to be_falsey
+  #   end
+  # end
+  #
+  # context 'disconnecting' do
+  #   before do
+  #     faye_subscribe 'room1', client_id, 'user_1'
+  #     faye_subscribe 'room2', client_id, 'user_1'
+  #     faye_subscribe 'room1', another_client_id, 'user_2'
+  #   end
+  #
+  #   it 'removes the user from all channels' do
+  #     faye_disconnect(client_id)
+  #     expect(described_class.user_in_any_channel?('user_1')).to be_falsey
+  #     expect(described_class.users_in_channel('room1')).to eq(['user_2'])
+  #   end
+  # end
 end

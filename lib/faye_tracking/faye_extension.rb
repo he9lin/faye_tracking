@@ -35,9 +35,9 @@ module FayeTracking
         when '/meta/unsubscribe'
           # This is not reliable, more robust way to detect unsubscribe event.
           # see: http://faye.jcoglan.com/ruby/monitoring.html
-          @tracker.remove(subs_channel, client_id)
+          # @tracker.remove(subs_channel, client_id)
         when '/meta/disconnect'
-          @tracker.remove_all(client_id)
+          # @tracker.remove_all(client_id)
         end
       end
 
