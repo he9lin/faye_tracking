@@ -45,6 +45,11 @@ describe FayeTracking do
         expect(described_class.users_in_channel('room')).to \
           match_array(['user_1', 'user_2'])
       end
+
+      it 'associate client_id with user' do
+        faye_subscribe 'room', client_id, 'user_2'
+        expect(described_class.user_with_client_id(client_id)).to eq('user_2')
+      end
     end
 
     describe 'customize subscribe block' do

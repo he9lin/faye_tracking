@@ -24,6 +24,10 @@ module FayeTracking
       tracker.users_in_channel(channel)
     end
 
+    def user_with_client_id(client_id)
+      tracker.user_with_client_id(client_id)
+    end
+
     def reset_store
       redis.keys('*').each {|k| redis.del k}
     end
