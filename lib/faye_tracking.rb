@@ -28,6 +28,10 @@ module FayeTracking
       tracker.user_with_client_id(client_id)
     end
 
+    def remove_from_channel(channel, client)
+      tracker.remove(channel, client)
+    end
+
     def reset_store
       redis.keys('*').each {|k| redis.del k}
     end
@@ -68,6 +72,6 @@ end
 
 require "faye_tracking/faye_extension"
 require "faye_tracking/tracker"
-require "faye_tracking/store/abstract_key_list"
-require "faye_tracking/store/adapter/redis_key_list"
-require "faye_tracking/store/adapter/namespaced_key_list"
+require "faye_tracking/abstract_key_list"
+require "faye_tracking/redis_key_list"
+require "faye_tracking/namespaced_key_list"

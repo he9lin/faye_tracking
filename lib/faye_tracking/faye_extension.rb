@@ -17,8 +17,8 @@ module FayeTracking
       FayeTracking.logger.debug "received incoming message: #{message}"
 
       unless message['error']
-        subs_channel  = message['subscription']
-        client_id     = message['clientId']
+        subs_channel = message['subscription']
+        client_id    = message['clientId']
         run_subscribe_callbacks = false
 
         case message['channel']
@@ -35,9 +35,6 @@ module FayeTracking
         when '/meta/unsubscribe'
           # This is not reliable, more robust way to detect unsubscribe event.
           # see: http://faye.jcoglan.com/ruby/monitoring.html
-          # @tracker.remove(subs_channel, client_id)
-        when '/meta/disconnect'
-          # @tracker.remove_all(client_id)
         end
       end
 
