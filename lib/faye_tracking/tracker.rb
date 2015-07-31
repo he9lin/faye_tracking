@@ -14,6 +14,10 @@ module FayeTracking
       @client_id_to_users.add(client_id, user)
     end
 
+    def user_with_client_id(client_id)
+      @client_id_to_users.members(client_id).first
+    end
+
     def remove(channel, client_id)
       @channel_to_client_ids.remove(channel, client_id)
       @client_id_to_channels.remove(client_id, channel)
